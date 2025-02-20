@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/Config";
+import { addToCart, fetchCartItems } from "@/store/Shop/cartSlice";
 import {
   fetchAllShopProduct,
   fetchProductDetails,
@@ -32,6 +33,7 @@ function createSearchParamsHelper(filterParams) {
 
 const ShoppingList = () => {
   const { productList, productDetails } = useSelector((state) => state.shop);
+  const { user } = useSelector((state) => state.auth);
   const [sort, setSort] = useState(null);
   const [filter, setFilter] = useState({});
   const dispatch = useDispatch();
@@ -64,6 +66,17 @@ const ShoppingList = () => {
     setFilter(cpyFilters);
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
   }
+
+  function handleAddToCart(currenProductId) {
+    dispatch(
+      addToCart({ userId: user?.id, productId: currenProductId, quantity: 1 })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+      }
+    });
+  }
+
   useEffect(() => {
     if (filter && Object.keys(filter).length > 0) {
       const createQueryString = createSearchParamsHelper(filter);
@@ -83,6 +96,7 @@ const ShoppingList = () => {
   useEffect(() => {
     if (productDetails !== null) setOpenDetailsDialog(true);
   }, [productDetails]);
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -124,6 +138,7 @@ const ShoppingList = () => {
           {productList && productList.length > 0
             ? productList.map((productItem) => (
                 <ShoppingProductTile
+                  handleAddToCart={handleAddToCart}
                   handleGetProductDetails={handleGetProductDetails}
                   key={productItem._id}
                   product={productItem}
