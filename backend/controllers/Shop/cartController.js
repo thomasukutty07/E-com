@@ -92,8 +92,8 @@ const updateCartItemQuantity = async (req, res) => {
   try {
     const { productId, userId, quantity } = req.body;
 
-    if ((!productId || !userId, quantity < 0)) {
-      return res.status(404).json({ success: false, message: "Invalid data" });
+    if (!productId || !userId || quantity < 0) {
+      return res.status(400).json({ success: false, message: "Invalid data" });
     }
 
     const cart = await cartSchema.findOne({ userId });
@@ -122,21 +122,21 @@ const updateCartItemQuantity = async (req, res) => {
     });
 
     const populateCartItems = cart.items.map((item) => ({
-      productId: item.productId ? item.productId._id : null,
-      image: item.productId ? item.productId.image : null,
-      title: item.productId ? item.productId.title : "Product not found",
-      price: item.productId ? item.productId.price : null,
-      salePrice: item.productId ? item.productId.salePrice : null,
+      productId: item.productId?._id || null,
+      image: item.productId?.image || null,
+      title: item.productId?.title || "Product not found",
+      price: item.productId?.price || null,
+      salePrice: item.productId?.salePrice || null,
       quantity: item.quantity,
     }));
+
     res.status(200).json({
       success: true,
       data: { ...cart._doc, items: populateCartItems },
     });
   } catch (error) {
     console.log(error);
-
-    res.status(404).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 

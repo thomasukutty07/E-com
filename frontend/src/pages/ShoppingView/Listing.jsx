@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/Config";
+import { useToast } from "@/hooks/use-toast";
 import { addToCart, fetchCartItems } from "@/store/Shop/cartSlice";
 import {
   fetchAllShopProduct,
@@ -39,6 +40,7 @@ const ShoppingList = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const {toast} = useToast()
   function handleSort(value) {
     setSort(value);
   }
@@ -72,7 +74,10 @@ const ShoppingList = () => {
       addToCart({ userId: user?.id, productId: currenProductId, quantity: 1 })
     ).then((data) => {
       if (data?.payload?.success) {
-        dispatch(fetchCartItems(user?.id));
+        dispatch(fetchCartItems(user?.id))
+        toast({
+          title:"Added to cart"
+        })
       }
     });
   }
@@ -147,7 +152,7 @@ const ShoppingList = () => {
             : null}
         </div>
       </div>
-      <ProductDetailsDialog
+      <ProductDetailsDialog handleAddToCart={handleAddToCart}
         productDetails={productDetails}
         open={openDetailsDialog}
         setOpen={setOpenDetailsDialog}
