@@ -18,18 +18,31 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/Auth/authSlice";
 import UserCartWrapper from "./CartWrapper";
 import { fetchCartItems } from "@/store/Shop/cartSlice";
+import { Label } from "../ui/label";
 
 function MenuItems() {
+  const navigate = useNavigate();
+
+  function handleNavigate(getCurrentCategory) {
+    sessionStorage.removeItem("filters");
+    const currentFilter =
+      getCurrentCategory.id !== "home"
+        ? { category: [getCurrentCategory.id] }
+        : null;
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(getCurrentCategory.path);
+  }
+
   return (
     <nav className="flex flex-col lg:flex-row mb-3 lg:mb-0 lg:items-center gap-6">
       {shoppingHeaderMenuItems.map((menu) => (
-        <Link
-          className="text-sm font-medium gap-2"
+        <Label
+          onClick={() => handleNavigate(menu)}
+          className="text-sm font-medium gap-2 cursor-pointer"
           key={menu.id}
-          to={menu.path}
         >
           {menu.label}
-        </Link>
+        </Label>
       ))}
     </nav>
   );
@@ -41,19 +54,22 @@ function HeaderRightContent() {
   const dispatch = useDispatch();
   const [openCartSheet, setOpenCartSheet] = useState(false);
   const { cartItems } = useSelector((state) => state.cart);
+
   function handleUserLogout() {
     dispatch(logoutUser());
   }
 
   useEffect(() => {
-    dispatch(fetchCartItems(user?.id));
-  }, [dispatch]);
+    if (user?.id) {
+      dispatch(fetchCartItems(user?.id));
+    }
+  }, [dispatch, user?.id]); // ✅ Added user?.id in dependency array
 
   return (
     <div className="flex justify-between items-center flex-row my-3 gap-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Avatar className="bg-black cursor-pointer ">
+          <Avatar className="bg-black cursor-pointer">
             <AvatarFallback className="!bg-black !text-white font-extrabold uppercase">
               {user?.userName[0].toUpperCase() + user?.userName.slice(1, 2)}
             </AvatarFallback>
@@ -74,7 +90,10 @@ function HeaderRightContent() {
           <DropdownMenuSeparator />
         </DropdownMenuContent>
       </DropdownMenu>
-      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+
+      <Sheet open={openCartSheet} onOpenChange={setOpenCartSheet}>
+        {" "}
+        {/* ✅ Fixed */}
         <Button
           onClick={() => setOpenCartSheet(true)}
           variant="outline"
@@ -84,11 +103,7 @@ function HeaderRightContent() {
           <span className="sr-only">User cart</span>
         </Button>
         <UserCartWrapper
-          cartItems={
-            cartItems && cartItems.items && cartItems.items.length > 0
-              ? cartItems.items
-              : []
-          }
+          cartItems={cartItems?.items?.length > 0 ? cartItems.items : []}
         />
       </Sheet>
     </div>
@@ -97,6 +112,7 @@ function HeaderRightContent() {
 
 const ShoppingHeader = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">

@@ -1,3 +1,11 @@
+import levi from "../assets/levi.png";
+import nike from "../assets/nike.png";
+import puma from "../assets/puma.png";
+import adidas from "../assets/adidas.png";
+import h_m from "../assets/h&m.png";
+import zara from "../assets/zara.png";
+
+export { levi, zara, puma, nike, adidas, h_m };
 export const registerFormControls = [
   {
     name: "userName",

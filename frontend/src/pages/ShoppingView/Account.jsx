@@ -1,5 +1,5 @@
 function ShoppingAccount() {
-  return <div>Account</div>;
+  return <div> </div>;
 }
 
 export default ShoppingAccount;
