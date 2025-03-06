@@ -59,8 +59,6 @@ const ShoppingHome = () => {
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
   }
   function handleGetProductDetails(getCurrentProductId) {
-    console.log(getCurrentProductId);
-
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
@@ -135,10 +133,10 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {categoriesWithIcon.map((categoryItem) => (
               <Card
+                key={categoryItem.id}
                 onClick={() =>
                   handleNavigateToListingPage(categoryItem.id, "category")
                 }
-                key={categoryItem.key}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
                 <CardContent className="flex flex-col items-center justify-center p-6">
@@ -160,10 +158,10 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {brandsWithIcon.map((brandItem) => (
               <Card
+                key={brandItem.id}
                 onClick={() =>
                   handleNavigateToListingPage(brandItem.id, "brand")
                 }
-                key={brandItem.key}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
                 <CardContent className="flex flex-col items-center justify-center p-6">
@@ -190,6 +188,7 @@ const ShoppingHome = () => {
             {productList && productList.length > 0
               ? productList.map((productItem) => (
                   <ShoppingProductTile
+                    key={productItem._id}
                     handleGetProductDetails={handleGetProductDetails}
                     handleAddToCart={handleAddToCart}
                     product={productItem}

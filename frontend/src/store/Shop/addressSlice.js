@@ -8,7 +8,7 @@ const initialState = {
 
 export const addNewAddress = createAsyncThunk(
   "address/addAddress",
-  async ({ formData }) => {
+  async (formData) => {
     const response = await axios.post(
       `http://localhost:5000/api/shop/address/add`,
       formData
@@ -18,24 +18,31 @@ export const addNewAddress = createAsyncThunk(
 );
 export const editAddress = createAsyncThunk(
   "address/editAddress",
-  async ({ userId, addressId, formData }) => {
-    const response = await axios.put(
-      `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
-      formData
-    );
-    return response?.data;
+  async ({ userId, addressId, formData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
+        formData
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data || { message: "Something went wrong!" }
+      );
+    }
   }
 );
+
 export const fetchAllAddress = createAsyncThunk(
   "address/fetchAllAddress",
-  async ({ userId }) => {
+  async (userId) => {
     const response = await axios.get(
       `http://localhost:5000/api/shop/address/get/${userId}`
     );
     return response?.data;
   }
 );
-export const delteAddress = createAsyncThunk(
+export const deleteAddress = createAsyncThunk(
   "address/deleteAddress",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
@@ -54,12 +61,11 @@ const addressSlice = createSlice({
       .addCase(addNewAddress.pending, (state) => {
         (state.isLoading = true), (state.addressList = []);
       })
-      .addCase(addNewAddress.fulfilled, (state, action) => {
-        (state.isLoading = false), (state.addressList = action.payload.data);
+      .addCase(addNewAddress.fulfilled, (state) => {
+        state.isLoading = false;
       })
       .addCase(addNewAddress.rejected, (state) => {
         state.isLoading = false;
-        state.addressList = [];
       })
       .addCase(fetchAllAddress.pending, (state) => {
         (state.isLoading = true), (state.addressList = []);

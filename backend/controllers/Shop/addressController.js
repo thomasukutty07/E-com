@@ -1,15 +1,17 @@
-import addressSchema from "../../models/Address.js";
+import AddressSchema from "../../models/Address.js";
 
 // Add Address
 const addAddress = async (req, res) => {
   try {
     const { userId, phone, pincode, address, notes, city } = req.body;
     if (!userId || !phone || !pincode || !address || !notes || !city) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid details!" });
+      return res.status(400).json({
+        success: false,
+        message:
+          "All fields are required: userId, phone, pincode, address, notes, and city.",
+      });
     }
-    const newlyCreatedAddress = new addressSchema({
+    const newlyCreatedAddress = new AddressSchema({
       userId,
       pincode,
       phone,
@@ -20,9 +22,12 @@ const addAddress = async (req, res) => {
 
     await newlyCreatedAddress.save();
 
-    res.status(200).json({ success: false, data: newlyCreatedAddress });
+    res.status(201).json({ success: true, data: newlyCreatedAddress });
   } catch (error) {
-    res.status(400).json({ success: false, message: error });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
   }
 };
 
@@ -36,8 +41,8 @@ const fetchAllAddress = async (req, res) => {
         .status(400)
         .json({ success: false, message: "userId is required" });
     }
-    const addressList = await addressSchema.find({ userId });
-    res.status(200).json({ success: true, data: addressList });
+    const addressList = await AddressSchema.find({ userId });
+    res.status(201).json({ success: true, data: addressList });
   } catch (error) {
     res.status(400).json({ success: false, message: error });
   }
@@ -47,55 +52,63 @@ const fetchAllAddress = async (req, res) => {
 const editAddress = async (req, res) => {
   try {
     const { userId, addressId } = req.params;
-    const { formData } = req.body;
-    if (!userId || !addAddress) {
+    const formData = req.body;
+
+    if (!userId || !addressId) {
       return res
         .status(400)
-        .json({ success: false, message: "userdId and address is required" });
+        .json({ success: false, message: "userId and addressId are required" });
     }
 
-    const address = await addressSchema.findOneAndUpdate(
-      {
-        _id: addressId,
-        userId,
-      },
+    const address = await AddressSchema.findOneAndUpdate(
+      { _id: addressId, userId },
       formData,
       { new: true }
     );
+
     if (!address) {
       return res
-        .status(400)
+        .status(404)
         .json({ success: false, message: "Address not found" });
     }
+
     res.status(200).json({ success: true, data: address });
   } catch (error) {
-    res.status(400).json({ success: false, message: error });
+    console.error("Error updating address:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
 // Delete Address
 const deleteAddress = async (req, res) => {
   try {
-    const { productId, userId } = req.params;
-    if (!userId || !addAddress) {
+    const { addressId, userId } = req.params;
+
+    if (!userId || !addressId) {
       return res
         .status(400)
-        .json({ success: false, message: "userdId and address is required" });
+        .json({ success: false, message: "userId and addressId are required" });
     }
-    const deleteAddress = addressSchema.findByIdAndDelete({
+
+    const deletedAddress = await AddressSchema.findOneAndDelete({
       _id: addressId,
       userId,
     });
 
-    if (!deleteAddress) {
-      res.status(200).json({ success: false, message: "Address not found" });
+    if (!deletedAddress) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Address not found" });
     }
 
     res
       .status(200)
-      .json({ success: false, message: "Address deleted successfully" });
+      .json({ success: true, message: "Address deleted successfully" });
   } catch (error) {
-    res.status(400).json({ success: false, message: error });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
   }
 };
 

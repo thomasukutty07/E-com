@@ -63,7 +63,7 @@ function HeaderRightContent() {
     if (user?.id) {
       dispatch(fetchCartItems(user?.id));
     }
-  }, [dispatch, user?.id]); // ✅ Added user?.id in dependency array
+  }, [dispatch, user?.id]);
 
   return (
     <div className="flex justify-between items-center flex-row my-3 gap-4">
@@ -92,8 +92,6 @@ function HeaderRightContent() {
       </DropdownMenu>
 
       <Sheet open={openCartSheet} onOpenChange={setOpenCartSheet}>
-        {" "}
-        {/* ✅ Fixed */}
         <Button
           onClick={() => setOpenCartSheet(true)}
           variant="outline"
@@ -103,6 +101,7 @@ function HeaderRightContent() {
           <span className="sr-only">User cart</span>
         </Button>
         <UserCartWrapper
+          setOpenCartSheet={setOpenCartSheet}
           cartItems={cartItems?.items?.length > 0 ? cartItems.items : []}
         />
       </Sheet>
@@ -111,8 +110,6 @@ function HeaderRightContent() {
 }
 
 const ShoppingHeader = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
