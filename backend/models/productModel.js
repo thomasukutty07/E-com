@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const productShcema = new mongoose.Schema(
+const productSchema = new mongoose.Schema(
   {
     image: String,
     title: String,
@@ -14,5 +14,4 @@ const productShcema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const user = mongoose.model("Product", productShcema);
-export default user;
+export default mongoose.model("Product", productSchema);

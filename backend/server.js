@@ -8,6 +8,7 @@ import adminProdcutRouter from "./routes/Admin/productsRoute.js";
 import shopProductRouter from "./routes/Shop/productsRoutes.js";
 import shopCartRouter from "./routes/Shop/cartRoutes.js";
 import shopAddressRouter from "./routes/Shop/addressRoutes.js";
+import shopOrderRouter from "./routes/Shop/orderRoutes.js";
 dotenv.config();
 const app = express();
 app.use(
@@ -31,6 +32,7 @@ app.use("/api/admin/products", adminProdcutRouter);
 app.use("/api/shop/products", shopProductRouter);
 app.use("/api/shop/cart", shopCartRouter);
 app.use("/api/shop/address", shopAddressRouter);
+app.use("/api/shop/order", shopOrderRouter);
 const port = process.env.PORT || 5000;
 const startServer = async () => {
   try {

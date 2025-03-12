@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const AddressShcema = new mongoose.Schema(
+const AddressSchema = new mongoose.Schema(
   {
     userId: String,
     address: String,
@@ -12,4 +12,4 @@ const AddressShcema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Address", AddressShcema);
+export default mongoose.model("Address", AddressSchema);
