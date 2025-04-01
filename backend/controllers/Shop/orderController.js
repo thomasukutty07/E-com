@@ -13,9 +13,10 @@ const createOrder = async (req, res) => {
       totalAmount,
       orderDate,
       orderUpdateDate,
-      paymentId,
-      payerId,
     } = req.body;
+
+    // Determine currency dynamically
+    const acceptedCurrency = paymentMethod === "paypal" ? "USD" : "EUR";
 
     const create_payment_json = {
       intent: "sale",
@@ -33,26 +34,25 @@ const createOrder = async (req, res) => {
               name: item.title,
               sku: item.productId,
               price: item.price.toFixed(2),
-              currency: "USD",
+              currency: acceptedCurrency,
               quantity: item.quantity,
             })),
           },
           amount: {
-            currency: "USD",
+            currency: acceptedCurrency,
             total: totalAmount.toFixed(2),
           },
-          description: "description",
+          description: "Order Payment",
         },
       ],
     };
 
     paypal.payment.create(create_payment_json, async (error, paymentInfo) => {
       if (error) {
-        console.log(error);
-
+        console.error("PayPal Error:", error.response);
         return res.status(500).json({
           success: false,
-          message: "Error while creating paypal payment",
+          message: error.response?.message || "Error while creating PayPal payment",
         });
       } else {
         const newlyCreatedOrder = new OrderSchema({
@@ -65,16 +65,11 @@ const createOrder = async (req, res) => {
           totalAmount,
           orderDate,
           orderUpdateDate,
-          paymentId,
-          payerId,
         });
 
         await newlyCreatedOrder.save();
 
-
-        const approvalURL = paymentInfo.links.find(
-          (link) => link.rel === "approval_url"
-        ).href;
+        const approvalURL = paymentInfo.links.find((link) => link.rel === "approval_url").href;
 
         res.status(201).json({
           success: true,
@@ -84,16 +79,35 @@ const createOrder = async (req, res) => {
       }
     });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({
-      success: false,
-      message: "Some error occured!",
-    });
+    console.error(e);
+    res.status(500).json({ success: false, message: "Some error occurred!" });
   }
 };
+
 const capturePayment = async (req, res) => {
   try {
+    const { paymentId, payerId } = req.body;
+
+    const execute_payment_json = {
+      payer_id: payerId,
+    };
+
+    paypal.payment.execute(paymentId, execute_payment_json, async (error, payment) => {
+      if (error) {
+        console.error("PayPal Execution Error:", error.response);
+        return res.status(400).json({ success: false, message: error.response?.message || "Payment execution failed" });
+      }
+
+      await OrderSchema.findOneAndUpdate(
+        { paymentId },
+        { paymentStatus: "Completed", orderStatus: "Confirmed" },
+        { new: true }
+      );
+
+      res.status(200).json({ success: true, message: "Payment successful" });
+    });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ success: false, message: error.message });
   }
 };

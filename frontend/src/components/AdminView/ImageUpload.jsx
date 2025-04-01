@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { FileIcon, UploadCloud, XIcon } from "lucide-react";
+import { FileIcon, Import, UploadCloud, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { Skeleton } from "../ui/skeleton";
@@ -50,7 +50,7 @@ const ProductUploadImage = ({
     const data = new FormData();
     data.append("my_file", imageFile);
     const response = await axios.post(
-      "http://localhost:5000/api/admin/products/upload-image",
+      `${Import.meta.env.VITE_API_URL}/api/admin/products/upload-image`,
       data
     );
     console.log(response, "response");

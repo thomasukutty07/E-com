@@ -59,6 +59,7 @@ const App = () => {
           <Route path="orders" element={<AdminOrders />} />
           <Route path="features" element={<AdminFeatures />} />
         </Route>
+
         <Route
           path="/shop"
           element={
@@ -73,6 +74,7 @@ const App = () => {
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />
         </Route>
+
         <Route path="/unauth-page" element={<UnAuthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
