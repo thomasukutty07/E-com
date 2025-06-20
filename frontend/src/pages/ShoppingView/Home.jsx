@@ -63,6 +63,10 @@ const ShoppingHome = () => {
   }
 
   function handleAddToCart(currenProductId) {
+    if (!user) {
+      navigate("/auth/login");
+      return;
+    }
     dispatch(
       addToCart({ userId: user?.id, productId: currenProductId, quantity: 1 })
     ).then((data) => {

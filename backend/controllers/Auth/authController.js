@@ -10,11 +10,18 @@ const RegisterUser = async (req, res) => {
       .json({ success: false, message: "All fields are required" });
   }
   try {
-    const exsitingUser = await User.findOne({ email });
-    if (exsitingUser) {
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
       return res.json({
         success: false,
         message: "Email already in use",
+      });
+    }
+    const existingUserName = await User.findOne({ userName });
+    if (existingUserName) {
+      return res.json({
+        success: false,
+        message: "Username already in use",
       });
     }
     const salt = await bcrypt.genSalt(12);
@@ -31,9 +38,12 @@ const RegisterUser = async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.code === 11000) {
+      let message = "Duplicate field";
+      if (error.keyPattern?.email) message = "Email already in use";
+      if (error.keyPattern?.userName) message = "Username already in use";
       return res
         .status(400)
-        .json({ success: false, message: "Email already in use" });
+        .json({ success: false, message });
     }
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }

@@ -5,7 +5,7 @@ import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { StarIcon } from "lucide-react";
 import { Input } from "../ui/input";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setProductDeatils } from "@/store/Shop/shopSlice";
 
 const ProductDetailsDialog = ({
@@ -15,9 +15,17 @@ const ProductDetailsDialog = ({
   handleAddToCart,
 }) => {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   function handleDialogClose() {
     setOpen(false);
     dispatch(setProductDeatils());
+  }
+  function handleAddToCartWithAuth() {
+    if (!user) {
+      window.location.href = "/auth/login";
+      return;
+    }
+    handleAddToCart(productDetails._id);
   }
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
@@ -67,7 +75,7 @@ const ProductDetailsDialog = ({
           <div className="mt-5 mb-5">
             <Button
               className=" w-full"
-              onClick={() => handleAddToCart(productDetails._id)}
+              onClick={handleAddToCartWithAuth}
             >
               Add to cart
             </Button>

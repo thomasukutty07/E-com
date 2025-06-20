@@ -93,6 +93,25 @@ const createOrder = async (req, res) => {
 };
 const capturePayment = async (req, res) => {
   try {
+    const { paymentId, payerId, orderId } = req.body;
+    if (!paymentId || !payerId || !orderId) {
+      return res.status(400).json({ success: false, message: "Missing paymentId, payerId, or orderId" });
+    }
+    paypal.payment.execute(paymentId, { payer_id: payerId }, async (error, payment) => {
+      if (error) {
+        console.log(error.response);
+        return res.status(500).json({ success: false, message: "Payment execution failed", error: error.response });
+      } else {
+        // Update order status in DB
+        await OrderSchema.findByIdAndUpdate(orderId, {
+          paymentStatus: "Paid",
+          orderStatus: "Processing",
+          paymentId,
+          payerId,
+        });
+        return res.status(200).json({ success: true, message: "Payment successful", payment });
+      }
+    });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

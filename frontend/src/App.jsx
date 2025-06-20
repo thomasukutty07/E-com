@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import AuthLayout from "./components/Auth/layout";
 import LoginUser from "./pages/Auth/login";
 import RegisterUser from "./pages/Auth/register";
@@ -34,6 +34,10 @@ const App = () => {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/shop/home" />}
+        />
         <Route
           path="/auth"
           element={

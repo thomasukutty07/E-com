@@ -3,8 +3,14 @@ import { Navigate, useLocation } from "react-router-dom";
 const CheckAuth = ({ isAuthenticated, user, children }) => {
   const location = useLocation();
 
+  // Only protect /admin and /shop/checkout
+  const isProtectedRoute =
+    location.pathname.startsWith("/admin") ||
+    location.pathname === "/shop/checkout";
+
   if (
     !isAuthenticated &&
+    isProtectedRoute &&
     !location.pathname.includes("/login") &&
     !location.pathname.includes("/register")
   ) {

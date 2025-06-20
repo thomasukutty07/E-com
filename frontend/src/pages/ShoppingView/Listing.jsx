@@ -70,6 +70,10 @@ const ShoppingList = () => {
   }
 
   function handleAddToCart(currenProductId) {
+    if (!user) {
+      window.location.href = "/auth/login";
+      return;
+    }
     dispatch(
       addToCart({ userId: user?.id, productId: currenProductId, quantity: 1 })
     ).then((data) => {
