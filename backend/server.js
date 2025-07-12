@@ -51,10 +51,10 @@ app.use("/api/shop/order", shopOrderRouter);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, '../client/dist')));
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/dist/index.html"));
+  res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
 });
 
 // Start server
