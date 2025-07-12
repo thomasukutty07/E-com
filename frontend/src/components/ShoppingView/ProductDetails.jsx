@@ -47,11 +47,11 @@ const ProductDetails = ({ productDetails, handleAddToCart }) => {
       <div className="w-full bg-white rounded-2xl shadow-lg p-2 sm:p-8 flex flex-col md:flex-row gap-4 sm:gap-8">
         {/* Left: Gallery */}
         <div className="flex-1 flex flex-col items-center">
-          <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center mb-4">
+          <div className="w-full rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center mb-4" style={{ minHeight: 200 }}>
             <img
               src={selectedImage}
               alt={productDetails?.title}
-              className="object-cover w-full h-full max-h-[400px]"
+              className="object-contain w-full max-h-[400px]"
             />
           </div>
           {gallery.length > 1 && (
