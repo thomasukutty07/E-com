@@ -9,7 +9,7 @@ const initialState = {
 
 export const checkAuth = createAsyncThunk("/auth/checkAuth", async () => {
   const response = await axios.get(
-    `${import.meta.env.VITE_API_URL}/api/auth/check-auth`,
+    `/api/auth/check-auth`,
 
     {
       withCredentials: true,
@@ -25,7 +25,7 @@ export const registerUser = createAsyncThunk(
   "/auth/register",
   async (formData) => {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/auth/register`,
+      `/api/auth/register`,
       formData,
       {
         withCredentials: true,
@@ -37,7 +37,7 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk("auth/login", async (formData) => {
   const response = await axios.post(
-    `${import.meta.env.VITE_API_URL}/api/auth/login`,
+    `/api/auth/login`,
     formData,
     { withCredentials: true }
   );
@@ -45,7 +45,7 @@ export const loginUser = createAsyncThunk("auth/login", async (formData) => {
 });
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
   const response = await axios.post(
-    `${import.meta.env.VITE_API_URL}/api/auth/logout`,
+    `/api/auth/logout`,
     {},
 
     { withCredentials: true }

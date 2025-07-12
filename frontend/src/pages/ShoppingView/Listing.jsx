@@ -115,7 +115,7 @@ const ShoppingList = () => {
           <h2 className="text-lg font-extrabold">All Products</h2>
           <div className="flex items-center gap-3">
             <span className="text-muted-foreground">
-              {productList.length} products
+              {productList?.length || 0} products
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

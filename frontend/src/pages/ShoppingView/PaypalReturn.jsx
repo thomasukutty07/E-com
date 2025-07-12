@@ -15,7 +15,7 @@ const PaypalReturnPage = () => {
     const payerId = params.get("PayerID");
     if (paymentId && payerId && orderId) {
       axios
-        .post(`${import.meta.env.VITE_API_URL}/api/shop/order/capture`, {
+        .post(`/api/shop/order/capture`, {
           paymentId,
           payerId,
           orderId,

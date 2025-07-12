@@ -64,6 +64,7 @@ function HeaderRightContent() {
       dispatch(fetchCartItems(user?.id));
     }
   }, [dispatch, user?.id]);
+  console.log(user);
 
   return (
     <div className="flex justify-between items-center flex-row my-3 gap-4">
@@ -71,23 +72,52 @@ function HeaderRightContent() {
         <DropdownMenuTrigger asChild>
           <Avatar className="bg-black cursor-pointer">
             <AvatarFallback className="!bg-black !text-white font-extrabold uppercase">
-              {user?.userName[0].toUpperCase() + user?.userName.slice(1, 2)}
+              {user?.userName ? (
+                user.userName[0].toUpperCase() + user.userName.slice(1, 1)
+              ) : (
+                <User className="w-4 h-4" />
+              )}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" className="w-48 mt-3">
-          <DropdownMenuLabel>{`Hi, ${user?.userName}`}</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            {user ? (
+              `Hi, ${
+                user?.userName[0].toUpperCase() +
+                  user.userName.slice(1, user.userName.length) || "User"
+              }`
+            ) : (
+              <div className="flex gap-1">
+                <Link to={"/auth/login"}>
+                  Please {" "}
+                  <span className="text-black font-bold underline">Login </span>
+                </Link>
+
+                <Link to={"/auth/register"}>
+                  or {" "}
+                  <span className="text-black font-bold underline">
+                    Sign Up
+                  </span>
+                </Link>
+              </div>
+            )}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => navigate("/shop/account")}>
             <User className="w-10" />
             Account
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleUserLogout}>
-            <LogOut />
-            Logout
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
+          {user && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleUserLogout}>
+                <LogOut />
+                Logout
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 
