@@ -5,12 +5,8 @@ import { StarIcon } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-const mockGallery = [
-  "https://via.placeholder.com/600x600.png?text=Product+Image",
-  "https://via.placeholder.com/600x600.png?text=Gallery+1",
-  "https://via.placeholder.com/600x600.png?text=Gallery+2",
-];
 
 const mockReviews = [
   {
@@ -31,6 +27,7 @@ const ProductDetails = ({ productDetails, handleAddToCart }) => {
   if (!productDetails) return null;
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
   // Use productDetails.image as the only image if no gallery is provided
   const gallery = productDetails.gallery && productDetails.gallery.length > 0
     ? productDetails.gallery
@@ -39,7 +36,7 @@ const ProductDetails = ({ productDetails, handleAddToCart }) => {
 
   function handleAddToCartWithAuth() {
     if (!user) {
-      window.location.href = "/auth/login";
+      navigate("/auth/login");
       return;
     }
     handleAddToCart(productDetails._id);
@@ -47,7 +44,6 @@ const ProductDetails = ({ productDetails, handleAddToCart }) => {
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50 p-0 sm:p-4">
-  
       <div className="w-full bg-white rounded-2xl shadow-lg p-2 sm:p-8 flex flex-col md:flex-row gap-4 sm:gap-8">
         {/* Left: Gallery */}
         <div className="flex-1 flex flex-col items-center">

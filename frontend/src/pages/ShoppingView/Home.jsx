@@ -23,6 +23,7 @@ import { adidas, h_m, levi, nike, puma, zara } from "@/Config";
 import { useNavigate } from "react-router-dom";
 import { addToCart, fetchCartItems } from "@/store/Shop/cartSlice";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -44,7 +45,7 @@ const ShoppingHome = () => {
   const slides = [bannerOne, bannerTwo, bannerThree];
   const [currentSlide, setCurrentSlide] = useState(0);
   const dispatch = useDispatch();
-  const { productList, productDetails } = useSelector((state) => state.shop);
+  const { productList, isLoading } = useSelector((state) => state.shop);
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -185,15 +186,28 @@ const ShoppingHome = () => {
             Feature category
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {productList && productList.length > 0
-              ? productList.map((productItem) => (
-                  <ShoppingProductTile
-                    key={productItem._id}
-                    handleAddToCart={handleAddToCart}
-                    product={productItem}
-                  />
-                ))
-              : null}
+            {isLoading ? (
+              // Loading skeletons
+              Array.from({ length: 8 }).map((_, index) => (
+                <div key={index} className="w-full max-w-sm mx-auto">
+                  <Skeleton className="w-full h-[300px] rounded-t-lg" />
+                  <div className="p-4 space-y-2">
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-4 w-1/3" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                </div>
+              ))
+            ) : productList && productList.length > 0 ? (
+              productList.map((productItem) => (
+                <ShoppingProductTile
+                  key={productItem._id}
+                  handleAddToCart={handleAddToCart}
+                  product={productItem}
+                />
+              ))
+            ) : null}
           </div>
         </div>
       </section>

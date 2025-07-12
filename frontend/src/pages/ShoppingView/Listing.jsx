@@ -20,6 +20,7 @@ import { ArrowUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function createSearchParamsHelper(filterParams) {
   const queryParams = [];
@@ -33,7 +34,7 @@ function createSearchParamsHelper(filterParams) {
 }
 
 const ShoppingList = () => {
-  const { productList, productDetails } = useSelector((state) => state.shop);
+  const { productList, isLoading } = useSelector((state) => state.shop);
   const { user } = useSelector((state) => state.auth);
   const [sort, setSort] = useState(null);
   const [filter, setFilter] = useState({});
@@ -139,15 +140,28 @@ const ShoppingList = () => {
           </div>
         </div>
         <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-6">
-          {productList && productList.length > 0
-            ? productList.map((productItem) => (
-                <ShoppingProductTile
-                  handleAddToCart={handleAddToCart}
-                  key={productItem._id}
-                  product={productItem}
-                />
-              ))
-            : null}
+          {isLoading ? (
+            // Loading skeletons
+            Array.from({ length: 12 }).map((_, index) => (
+              <div key={index} className="w-full max-w-sm mx-auto">
+                <Skeleton className="w-full h-[300px] rounded-t-lg" />
+                <div className="p-4 space-y-2">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="h-4 w-1/3" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </div>
+            ))
+          ) : productList && productList.length > 0 ? (
+            productList.map((productItem) => (
+              <ShoppingProductTile
+                handleAddToCart={handleAddToCart}
+                key={productItem._id}
+                product={productItem}
+              />
+            ))
+          ) : null}
         </div>
       </div>
     </div>
