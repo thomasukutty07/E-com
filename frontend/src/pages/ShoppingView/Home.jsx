@@ -115,7 +115,7 @@ const ShoppingHome = () => {
               (prevSlide) => (prevSlide - 1 + slides.length) % slides.length
             )
           }
-          className="absolute top-1/2 left-2 sm:left-4 transform -translate-y-1/2 bg-white/80 "
+          className="absolute top-1/2 left-2 sm:left-4 transform -translate-y-1/2 bg-white/80 hidden md:flex"
           variant="outline"
           size="icon"
         >
@@ -125,7 +125,7 @@ const ShoppingHome = () => {
           onClick={() =>
             setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length)
           }
-          className="absolute top-1/2 right-2 sm:right-4 transform -translate-y-1/2 bg-white/80 "
+          className="absolute top-1/2 right-2 sm:right-4 transform -translate-y-1/2 bg-white/80 hidden md:flex"
           variant="outline"
           size="icon"
         >
