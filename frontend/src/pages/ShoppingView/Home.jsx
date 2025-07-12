@@ -23,7 +23,6 @@ import { adidas, h_m, levi, nike, puma, zara } from "@/Config";
 import { useNavigate } from "react-router-dom";
 import { addToCart, fetchCartItems } from "@/store/Shop/cartSlice";
 import { useToast } from "@/hooks/use-toast";
-import ProductDetailsDialog from "@/components/ShoppingView/ProductDetails";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -49,7 +48,6 @@ const ShoppingHome = () => {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   function handleNavigateToListingPage(getCurrentCategoryId, category) {
     sessionStorage.removeItem("filters");
     const currentFilter = {
@@ -90,9 +88,6 @@ const ShoppingHome = () => {
       fetchAllShopProduct({ filterParams: {}, sortParams: "price-lowtohigh" })
     );
   }, [dispatch]);
-  useEffect(() => {
-    if (productDetails !== null) setOpenDetailsDialog(true);
-  }, [productDetails]);
 
   return (
     <div className="flex  flex-col min-h-screen">
@@ -194,7 +189,6 @@ const ShoppingHome = () => {
               ? productList.map((productItem) => (
                   <ShoppingProductTile
                     key={productItem._id}
-                    handleGetProductDetails={handleGetProductDetails}
                     handleAddToCart={handleAddToCart}
                     product={productItem}
                   />
@@ -203,12 +197,6 @@ const ShoppingHome = () => {
           </div>
         </div>
       </section>
-      <ProductDetailsDialog
-        handleAddToCart={handleAddToCart}
-        productDetails={productDetails}
-        open={openDetailsDialog}
-        setOpen={setOpenDetailsDialog}
-      />
     </div>
   );
 };
