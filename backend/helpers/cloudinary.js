@@ -45,7 +45,6 @@ function extractPublicIdFromUrl(imageUrl) {
 async function deleteImageFromCloudinary(imageUrl) {
   try {
     if (!imageUrl || !imageUrl.includes('cloudinary.com')) {
-      console.log('Not a Cloudinary URL, skipping deletion');
       return { result: 'not_cloudinary' };
     }
 

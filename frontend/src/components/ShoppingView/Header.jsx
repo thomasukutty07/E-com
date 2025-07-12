@@ -64,7 +64,6 @@ function HeaderRightContent() {
       dispatch(fetchCartItems(user?.id));
     }
   }, [dispatch, user?.id]);
-  console.log(user);
 
   return (
     <div className="flex justify-between items-center flex-row my-3 gap-4">

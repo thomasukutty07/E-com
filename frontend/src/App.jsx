@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { checkAuth } from "./store/Auth/authSlice";
 import { Skeleton } from "./components/ui/skeleton";
 import PaypalReturnPage from "./pages/ShoppingView/PaypalReturn";
+import PaymentNotIntegrated from "./pages/ShoppingView/PaymentNotIntegrated";
 const App = () => {
   const { isAuthenticated, user, isLoading } = useSelector(
     (state) => state.auth
@@ -76,6 +77,7 @@ const App = () => {
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />
+          <Route path="payment-not-integrated" element={<PaymentNotIntegrated />} />
         </Route>
         <Route path="/unauth-page" element={<UnAuthPage />} />
         <Route path="*" element={<NotFound />} />

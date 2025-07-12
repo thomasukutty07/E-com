@@ -19,8 +19,6 @@ function RegisterUser() {
   function handleSubmit(event) {
     event.preventDefault();
     dispatch(registerUser(formData)).then((data) => {
-      console.log(data);
-
       if (data?.payload?.success) {
         toast({
           title: data?.payload?.message,
@@ -32,7 +30,6 @@ function RegisterUser() {
           variant: "destructive",
         });
       }
-      console.log(data);
     });
   }
 

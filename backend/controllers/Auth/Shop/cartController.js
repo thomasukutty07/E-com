@@ -1,5 +1,5 @@
-import cartSchema from "../../models/cart.js";
-import productSchema from "../../models/productModel.js";
+import cartSchema from "../../../models/cart.js";
+import productSchema from "../../../models/productModel.js";
 
 const addToCart = async (req, res) => {
   try {
@@ -35,8 +35,6 @@ const addToCart = async (req, res) => {
     await cart.save();
     res.status(200).json({ success: true, data: cart });
   } catch (error) {
-    console.log(error);
-
     res.status(404).json({ success: false, message: error.message });
   }
 };
@@ -82,8 +80,6 @@ const fetchCartItems = async (req, res) => {
       data: { ...cart._doc, items: populateCartItems },
     });
   } catch (error) {
-    console.log(error);
-
     res.status(404).json({ success: false, message: error.message });
   }
 };
@@ -135,7 +131,6 @@ const updateCartItemQuantity = async (req, res) => {
       data: { ...cart._doc, items: populateCartItems },
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
@@ -180,7 +175,6 @@ const deleteCartItems = async (req, res) => {
       data: { ...cart._doc, items: populateCartItems },
     });
   } catch (error) {
-    console.log(error);
     res.status(404).json({ success: false, message: error.message });
   }
 };

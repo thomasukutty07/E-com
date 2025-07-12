@@ -4,7 +4,7 @@ import {
   addAddress,
   fetchAllAddress,
   deleteAddress,
-} from "../../controllers/Shop/addressController.js";
+} from "../../controllers/Auth/Shop/addressController.js";
 const router = express.Router();
 
 router.post("/add", addAddress);

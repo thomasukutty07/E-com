@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
+
 const initialState = {
   isLoading: false,
   productList: [],
@@ -10,7 +12,7 @@ export const addNewProduct = createAsyncThunk(
   "products/addNewProduct",
   async (formData) => {
     const result = await axios.post(
-      `/api/admin/products/add`,
+      `${API_BASE_URL}/api/admin/products/add`,
       formData,
       {
         headers: {
@@ -25,7 +27,7 @@ export const fetchAllProducts = createAsyncThunk(
   "products/fetchAllProducts",
   async () => {
     const result = await axios.get(
-      `/api/admin/products/get`
+      `${API_BASE_URL}/api/admin/products/get`
     );
     return result?.data;
   }
@@ -34,7 +36,7 @@ export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async ({ id, formData }) => {
     const result = await axios.put(
-      `/api/admin/products/edit/${id}`,
+      `${API_BASE_URL}/api/admin/products/edit/${id}`,
       formData
     );
     return result?.data;
@@ -44,7 +46,7 @@ export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
   async (id) => {
     const result = await axios.delete(
-      `/api/admin/products/delete/${id}`,
+      `${API_BASE_URL}/api/admin/products/delete/${id}`,
       {
         headers: {
           "Content-Type": "application/json",

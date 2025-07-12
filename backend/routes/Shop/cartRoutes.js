@@ -4,8 +4,8 @@ import {
   addToCart,
   updateCartItemQuantity,
   fetchCartItems,
-} from "../../controllers/Shop/cartController.js";
-const router = express();
+} from "../../controllers/Auth/Shop/cartController.js";
+const router = express.Router();
 
 router.post("/add", addToCart);
 router.get("/get/:userId", fetchCartItems);

@@ -84,13 +84,12 @@ const AdminProducts = () => {
   async function handleDeleteProduct(getCurrentProductId) {
     try {
       const response = await dispatch(deleteProduct(getCurrentProductId));
-      console.log(response);
       if (response?.payload?.success) {
         dispatch(fetchAllProducts());
         toast({ title: response?.payload?.message });
       }
     } catch (error) {
-      console.log(error);
+      // Error handling
     }
   }
   useEffect(() => {

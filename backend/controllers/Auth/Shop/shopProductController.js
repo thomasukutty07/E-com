@@ -1,4 +1,4 @@
-import productSchema from "../../models/productModel.js";
+import productSchema from "../../../models/productModel.js";
 
 const getFilteredProducts = async (req, res) => {
   try {
@@ -34,7 +34,6 @@ const getFilteredProducts = async (req, res) => {
     const products = await productSchema.find(filters).sort(sort);
     res.status(200).json({ success: true, data: products });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ success: false, message: "error occured" });
   }
 };
@@ -48,7 +47,6 @@ const getProductDetails = async (req, res) => {
     }
     res.status(200).json({ success: true, data: product });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ success: false, message: "error occured" });
   }
 };

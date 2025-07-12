@@ -1,4 +1,4 @@
-import AddressSchema from "../../models/Address.js";
+import AddressSchema from "../../../models/Address.js";
 
 // Add Address
 const addAddress = async (req, res) => {

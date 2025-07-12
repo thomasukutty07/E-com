@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
+
 const initialState = {
   approvalURL: null,
   isLoading: false,
@@ -12,7 +14,7 @@ export const createOrder = createAsyncThunk(
   async (orderData) => {
     try {
           const response = await axios.post(
-      `/api/shop/order/create`,
+      `${API_BASE_URL}/api/shop/order/create`,
         orderData
       );
       return response.data;

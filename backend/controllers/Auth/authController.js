@@ -36,7 +36,6 @@ const RegisterUser = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Registration Successfull" });
   } catch (error) {
-    console.log(error);
     if (error.code === 11000) {
       let message = "Duplicate field";
       if (error.keyPattern?.email) message = "Email already in use";
@@ -74,7 +73,8 @@ const LoginUser = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: false,
+        secure: true, 
+        sameSite: "strict",   
       })
       .json({
         success: true,
@@ -87,7 +87,6 @@ const LoginUser = async (req, res) => {
         },
       });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -98,7 +97,6 @@ const LogoutUser = async (req, res) => {
     res.clearCookie("token");
     return res.json({ success: true, message: "Logout Successfull" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -111,7 +109,6 @@ const authMiddleWare = async (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    console.log(error);
     res.status(401).json({ success: false, message: "Unauthorized User" });
   }
 };

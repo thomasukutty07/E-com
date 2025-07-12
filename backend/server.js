@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_BASE_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
@@ -38,8 +38,8 @@ const startServer = async () => {
   try {
     await connectDB();
     app.listen(port, () => {
-      console.log("Server is running on port 5000");
+      // Server started successfully
     });
-  } catch (error) {}
+  } catch (error) { }
 };
 startServer();

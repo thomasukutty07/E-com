@@ -21,7 +21,6 @@ const testCloudinaryUrlParsing = async (req, res) => {
       message: "URL parsing test completed"
     });
   } catch (error) {
-    console.error('Error in test function:', error);
     res.status(500).json({ 
       success: false, 
       message: error.message 
@@ -43,7 +42,6 @@ const handleImageUpload = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Image uploaded successfully", result });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -78,7 +76,6 @@ const addProduct = async (req, res) => {
       message: "Product added successfully",
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -89,7 +86,6 @@ const fetchAllProduct = async (req, res) => {
     const listOfProducts = await productSchema.find({});
     res.status(200).json({ success: true, data: listOfProducts });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -131,7 +127,6 @@ const editProduct = async (req, res) => {
       message: "Product updated successfully",
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -153,25 +148,20 @@ const deleteProduct = async (req, res) => {
     // Delete image from Cloudinary if it exists
     if (findProduct.image) {
       try {
-        console.log('Attempting to delete image from Cloudinary:', findProduct.image);
         const cloudinaryResult = await deleteImageFromCloudinary(findProduct.image);
-        console.log('Image deleted from Cloudinary successfully:', cloudinaryResult);
       } catch (cloudinaryError) {
-        console.error('Error deleting image from Cloudinary:', cloudinaryError);
         // Continue with product deletion even if image deletion fails
         // This ensures the product is still deleted from the database
       }
     } else {
-      console.log('No image URL found for product, skipping Cloudinary deletion');
+      // No image URL found for product, skipping Cloudinary deletion
     }
 
     // Delete the product from database
     await productSchema.findByIdAndDelete(id);
-    console.log('Product deleted from database successfully');
 
     res.status(200).json({ success: true, message: "Product Deleted" });
   } catch (error) {
-    console.log('Error in deleteProduct:', error);
     res.status(400).json({ success: false, message: error.message });
   }
 };

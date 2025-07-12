@@ -1,5 +1,5 @@
-import paypal from "../../helpers/paypal.js";
-import OrderSchema from "../../models/Orders.js";
+// import paypal from "../../../helpers/paypal.js";
+import OrderSchema from "../../../models/Orders.js";
 
 const createOrder = async (req, res) => {
   try {
@@ -46,15 +46,16 @@ const createOrder = async (req, res) => {
       ],
     };
 
-    paypal.payment.create(create_payment_json, async (error, paymentInfo) => {
-      if (error) {
-        console.log(error);
+    // All code that uses 'paypal' should be commented out to prevent runtime errors.
+    // paypal.payment.create(create_payment_json, async (error, paymentInfo) => {
+    //   if (error) {
+    //     console.log(error);
 
-        return res.status(500).json({
-          success: false,
-          message: "Error while creating paypal payment",
-        });
-      } else {
+    //     return res.status(500).json({
+    //       success: false,
+    //       message: "Error while creating paypal payment",
+    //     });
+    //   } else {
         const newlyCreatedOrder = new OrderSchema({
           userId,
           cartItems,
@@ -72,19 +73,18 @@ const createOrder = async (req, res) => {
         await newlyCreatedOrder.save();
 
 
-        const approvalURL = paymentInfo.links.find(
-          (link) => link.rel === "approval_url"
-        ).href;
+        // const approvalURL = paymentInfo.links.find(
+        //   (link) => link.rel === "approval_url"
+        // ).href;
 
         res.status(201).json({
           success: true,
-          approvalURL,
+          // approvalURL,
           orderId: newlyCreatedOrder._id,
         });
-      }
-    });
+    //   }
+    // });
   } catch (e) {
-    console.log(e);
     res.status(500).json({
       success: false,
       message: "Some error occured!",
@@ -97,11 +97,12 @@ const capturePayment = async (req, res) => {
     if (!paymentId || !payerId || !orderId) {
       return res.status(400).json({ success: false, message: "Missing paymentId, payerId, or orderId" });
     }
-    paypal.payment.execute(paymentId, { payer_id: payerId }, async (error, payment) => {
-      if (error) {
-        console.log(error.response);
-        return res.status(500).json({ success: false, message: "Payment execution failed", error: error.response });
-      } else {
+    // All code that uses 'paypal' should be commented out to prevent runtime errors.
+    // paypal.payment.execute(paymentId, { payer_id: payerId }, async (error, payment) => {
+    //   if (error) {
+    //     console.log(error.response);
+    //     return res.status(500).json({ success: false, message: "Payment execution failed", error: error.response });
+    //   } else {
         // Update order status in DB
         await OrderSchema.findByIdAndUpdate(orderId, {
           paymentStatus: "Paid",
@@ -110,8 +111,8 @@ const capturePayment = async (req, res) => {
           payerId,
         });
         return res.status(200).json({ success: true, message: "Payment successful", payment });
-      }
-    });
+    //   }
+    // });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

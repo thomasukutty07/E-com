@@ -1,17 +1,14 @@
 import Address from "@/components/ShoppingView/Address";
 import img from "../../assets/account.jpg";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import UserCartItemsContent from "@/components/ShoppingView/CartItemsContent";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { createOrder } from "@/store/Shop/orderSlice";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.cart);
-  const { user } = useSelector((state) => state.auth);
-  const { approvalURL } = useSelector((state) => state.shopOrder);
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
-  const [isPaymentStarted, setIsPaymentStarted] = useState(false);
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const totalCartAmount =
     cartItems.items && cartItems.items.length > 0
@@ -24,46 +21,9 @@ function ShoppingCheckout() {
       : 0;
 
   function handleInitiatePaypalPayment() {
-    const orderData = {
-      userId: user?.id,
-      cartItems: cartItems.items.map((singleCartItem) => ({
-        productId: singleCartItem?.productId,
-        title: singleCartItem?.title,
-        image: singleCartItem?.image,
-        price:
-          singleCartItem?.salePrice > 0
-            ? singleCartItem?.salePrice
-            : singleCartItem?.price,
-        quantity: singleCartItem?.quantity,
-      })),
-      addressInfo: {
-        addressId: currentSelectedAddress?._id,
-        address: currentSelectedAddress?.address,
-        city: currentSelectedAddress?.city,
-        pincode: currentSelectedAddress?.pincode,
-        phone: currentSelectedAddress?.phone,
-        notes: currentSelectedAddress?.notes,
-      },
-      orderStatus: "pending",
-      paymentMethod: "paypal",
-      paymentStatus: "pending",
-      totalAmount: totalCartAmount,
-      orderDate: new Date(),
-      orderUpdatedDate: new Date(),
-      paymentId: "",
-      payerId: "",
-    };
-    dispatch(createOrder(orderData)).then((data) => {
-      console.log(data);
-    });
+    // Navigate to payment not integrated page instead of initiating PayPal payment
+    navigate("/shop/payment-not-integrated");
   }
-  console.log(approvalURL);
-
-  useEffect(() => {
-    if (approvalURL) {
-      window.location.href = approvalURL;
-    }
-  }, [approvalURL]);
   return (
     <div className="flex flex-col">
       <div className="relative h-[300px] w-full overflow-hidden">
