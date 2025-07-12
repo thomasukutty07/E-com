@@ -64,5 +64,10 @@
     @apply bg-background text-foreground;
   }
 }
+@media (max-width: 450px) {
+  .h-xs-banner {
+    height: 160px;
+  }
+}
 
 

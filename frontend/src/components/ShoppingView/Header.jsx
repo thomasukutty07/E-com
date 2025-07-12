@@ -67,19 +67,20 @@ function HeaderRightContent() {
 
   return (
     <div className="flex justify-between items-center flex-row my-3 gap-4">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Avatar className="bg-black cursor-pointer">
-            <AvatarFallback className="!bg-black !text-white font-extrabold uppercase">
-              {user?.userName ? (
-                user.userName[0].toUpperCase() + user.userName.slice(1, 1)
-              ) : (
-                <User className="w-4 h-4" />
-              )}
-            </AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent side="right" className="w-48 mt-3">
+      <div className="flex items-center gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Avatar className="bg-black cursor-pointer">
+              <AvatarFallback className="!bg-black !text-white font-extrabold uppercase">
+                {user?.userName ? (
+                  user.userName[0].toUpperCase() + user.userName.slice(1, 1)
+                ) : (
+                  <User className="w-4 h-4" />
+                )}
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+                  <DropdownMenuContent side="right" className="w-48 mt-3">
           <DropdownMenuLabel>
             {user ? (
               `Hi, ${
@@ -119,6 +120,15 @@ function HeaderRightContent() {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+      
+  
+      {user && (
+        <span className="text-sm font-medium lg:hidden"> Hi,
+          {user.userName[0].toUpperCase() + user.userName.slice(1, user.userName.length)}
+        </span>
+      )}
+      
+      </div>
 
       <Sheet open={openCartSheet} onOpenChange={setOpenCartSheet}>
         <Button

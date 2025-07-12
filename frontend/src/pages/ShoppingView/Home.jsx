@@ -96,7 +96,7 @@ const ShoppingHome = () => {
 
   return (
     <div className="flex  flex-col min-h-screen">
-      <div className="relative w-full h-[600px] overflow-hidden">
+      <div className="relative w-full h-xs-banner h-60 sm:h-80 md:h-[400px] lg:h-[600px] overflow-hidden">
         {slides.map((item, index) => (
           <img
             key={index}
@@ -105,6 +105,7 @@ const ShoppingHome = () => {
               index === currentSlide ? "opacity-100" : "opacity-0"
             }  absolute top-0  left-0 w-full h-full object-cover transition-opacity duration-500`}
             alt=""
+            style={{ objectPosition: "center" }}
           />
         ))}
 
@@ -114,7 +115,7 @@ const ShoppingHome = () => {
               (prevSlide) => (prevSlide - 1 + slides.length) % slides.length
             )
           }
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80 "
+          className="absolute top-1/2 left-2 sm:left-4 transform -translate-y-1/2 bg-white/80 "
           variant="outline"
           size="icon"
         >
@@ -124,7 +125,7 @@ const ShoppingHome = () => {
           onClick={() =>
             setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length)
           }
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80 "
+          className="absolute top-1/2 right-2 sm:right-4 transform -translate-y-1/2 bg-white/80 "
           variant="outline"
           size="icon"
         >
