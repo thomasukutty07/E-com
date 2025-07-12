@@ -23,7 +23,7 @@ const app = express();
 // Middlewares
 app.use(
   cors({
-    origin: process.env.CLIENT_BASE_URL,  
+    origin: process.env.CLIENT_BASE_URL || 'https://e-com-1-8ewb.onrender.com',
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
