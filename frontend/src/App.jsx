@@ -22,6 +22,7 @@ import { Skeleton } from "./components/ui/skeleton";
 import PaypalReturnPage from "./pages/ShoppingView/PaypalReturn";
 import PaymentNotIntegrated from "./pages/ShoppingView/PaymentNotIntegrated";
 import ProductDetailsPage from "./pages/ShoppingView/ProductDetailsPage";
+import Loader from "./components/ui/spinner";
 const App = () => {
   const { isAuthenticated, user, isLoading } = useSelector(
     (state) => state.auth
@@ -32,7 +33,13 @@ const App = () => {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  if (isLoading) return <Skeleton className="w-full h-screen " />;
+  if (isLoading)
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
