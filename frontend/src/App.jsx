@@ -32,14 +32,11 @@ const App = () => {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  if (isLoading) return <Skeleton className="w-[800px] h-[600px] " />;
+  if (isLoading) return <Skeleton className="w-full h-screen " />;
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
-        <Route
-          path="/"
-          element={<Navigate to="/shop/home" />}
-        />
+        <Route path="/" element={<Navigate to="/shop/home" />} />
         <Route
           path="/auth"
           element={
@@ -78,7 +75,10 @@ const App = () => {
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />
-          <Route path="payment-not-integrated" element={<PaymentNotIntegrated />} />
+          <Route
+            path="payment-not-integrated"
+            element={<PaymentNotIntegrated />}
+          />
           <Route path="/shop/product/:id" element={<ProductDetailsPage />} />
         </Route>
         <Route path="/unauth-page" element={<UnAuthPage />} />
